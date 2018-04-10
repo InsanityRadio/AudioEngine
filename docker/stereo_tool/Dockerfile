@@ -1,4 +1,4 @@
-FROM jrottenberg/ffmpeg:3.3
+FROM jrottenberg/ffmpeg:3.2
 
 MAINTAINER Jamie Woods <jamie.woods@insanityradio.com>
 

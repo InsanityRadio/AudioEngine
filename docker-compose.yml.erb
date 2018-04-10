@@ -20,6 +20,27 @@ services:
       - INGEST_TYPE=<%= station['ingest']['type'] %>
       - INGEST_URI=<%= station['ingest']['uri'] %>
       - AUTH=<%= icecast['source_password'] %>
+
+<% station['mounts'].each do | mount | %>
+
+  tc_<%= station['name']%>_<%= mount['id'] %>:
+    build:
+      context: docker/transcode
+      args:
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    environment:
+      - INGEST_NAME=<%= station['name'] %>
+      - INGEST_CODEC=<%= mount['codec'] %>
+      - INGEST_PROCESSED=<%= mount['processed'] ? 1 : 0 %>
+      - INGEST_BITRATE=<%= mount['bitrate'] %>
+      - EGRESS_NAME=<%= mount['egress'] %>
+      - AUTH=<%= icecast['source_password'] %>
+
+<% end %>
+
 <% if station['processed'] %>
 
   dsp_<%= station['name'] %>:

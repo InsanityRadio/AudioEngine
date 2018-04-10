@@ -9,8 +9,8 @@
         <client-timeout>30</client-timeout>
         <header-timeout>15</header-timeout>
         <source-timeout>10</source-timeout>
-<!--        <threadpool>10</threadpool>
-        <burst-on-connect>1</burst-on-connect>-->
+        <threadpool>10</threadpool>
+        <burst-on-connect>1</burst-on-connect>
         <burst-size>65535</burst-size>
     </limits>
 
@@ -26,12 +26,19 @@
     <mount>
         <mount-name>/internal/master/<%= station['name'] %>.flac</mount-name>
     </mount>
-<% end %>
-<% config['icecast']['mounts'].each do | mount | %>
+    <mount>
+        <mount-name>/internal/master/<%= station['name'] %>_processed.flac</mount-name>
+        <fallback-mount>/internal/master/<%= station['name'] %>.flac</fallback-mount>
+    </mount>
+<% station['mounts'].each do | mount | %>
+    <mount>
+        <mount-name>/internal/master/<%= mount['egress'] %></mount-name>
+    </mount>
     <mount>
         <mount-name>/<%= mount['name'] %></mount-name>
-        <%# <fallback-mount></fallback-mount> %>
+        <fallback-mount>/internal/master/<%= mount['egress'] %></fallback-mount>
     </mount>
+<% end %>
 <% end %>
 
     <hostname><%= hostname %></hostname>
@@ -65,9 +72,9 @@
         </changeowner>
     </security>
 
-    <!--<http-headers>
+    <http-headers>
         <header name="Cache-Control" value="no-cache" />
         <header name="Expires" value="0" />
-    </http-headers>-->
+    </http-headers>
  
 </icecast>

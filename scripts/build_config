@@ -6,7 +6,15 @@ require 'digest/md5'
 
 $CONFIG = YAML::load(File.read('./config.yml'))
 
+$CONFIG['stations'].map do | station |
+	station['mounts'].map do | s |
+		s['egress'] = 'e_' + [station['name'], s['codec'], s['bitrate'], s['processed'] ? 'p' : 'n'].join('_')
+		s
+	end
+	station
+end
 
+p $CONFIG
 
 b = binding
 b.local_variable_set :config, $CONFIG
