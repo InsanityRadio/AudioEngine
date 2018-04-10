@@ -8,6 +8,12 @@ Audio egress will include:
 - Variable DASH
 - HLS
 
+# Building
+
+Season config.yml to taste. Then run `ruby scripts/build_config` to build `docker-compose.yml`, and fill config files.
+
+Then run `docker-compose build && docker-compose up -d` to build your system. 
+
 # License
 
 Licensed under the LGPLv3, probably. 

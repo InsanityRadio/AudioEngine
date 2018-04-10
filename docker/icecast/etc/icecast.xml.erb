@@ -1,0 +1,73 @@
+<icecast>
+    <location>Egham, UK</location>
+    <admin>com[DOT]insanityradio[AT]computing (reversed)</admin>
+
+    <limits>
+        <clients>100000</clients>
+        <sources>1000</sources>
+        <queue-size>524288</queue-size>
+        <client-timeout>30</client-timeout>
+        <header-timeout>15</header-timeout>
+        <source-timeout>10</source-timeout>
+<!--        <threadpool>10</threadpool>
+        <burst-on-connect>1</burst-on-connect>-->
+        <burst-size>65535</burst-size>
+    </limits>
+
+    <authentication>
+        <source-password><%= icecast['source_password']  %></source-password>
+        <relay-password><%= icecast['relay_password'] %></relay-password>
+
+        <admin-user>admin</admin-user>
+        <admin-password><%= icecast['admin_password'] %></admin-password>
+    </authentication>
+
+<% config['stations'].each do | station | %>
+    <mount>
+        <mount-name>/internal/master/<%= station['name'] %>.flac</mount-name>
+    </mount>
+<% end %>
+<% config['icecast']['mounts'].each do | mount | %>
+    <mount>
+        <mount-name>/<%= mount['name'] %></mount-name>
+        <%# <fallback-mount></fallback-mount> %>
+    </mount>
+<% end %>
+
+    <hostname><%= hostname %></hostname>
+
+    <listen-socket>
+        <port>8000</port>
+    </listen-socket>
+
+    <fileserve>1</fileserve>
+
+    <paths>
+        <basedir>/usr/share/icecast</basedir>
+
+        <logdir>/var/log/icecast</logdir>
+        <webroot>/usr/share/icecast/web</webroot>
+        <adminroot>/usr/share/icecast/admin</adminroot>
+    </paths>
+
+    <logging>
+        <accesslog>access.log</accesslog>
+        <errorlog>error.log</errorlog>
+      	<loglevel>3</loglevel> <!-- 4 Debug, 3 Info, 2 Warn, 1 Error -->
+      	<logsize>10000</logsize> <!-- Max size of a logfile -->
+    </logging>
+
+    <security>
+        <chroot>0</chroot>
+        <changeowner>
+            <user>icecast</user>
+            <group>icecast</group>
+        </changeowner>
+    </security>
+
+    <!--<http-headers>
+        <header name="Cache-Control" value="no-cache" />
+        <header name="Expires" value="0" />
+    </http-headers>-->
+ 
+</icecast>
