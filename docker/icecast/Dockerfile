@@ -9,7 +9,7 @@ ENV IC_VERSION "2.4.0-kh6"
 RUN apt-get -qq -y update && \
 	apt-get -qq -y install build-essential \
 		wget curl libxml2-dev libxslt1-dev \
-		libogg-dev libvorbis-dev libtheora-dev \
+		libogg-dev libvorbis-dev libtheora-dev libflac-dev \
 		libspeex-dev python-setuptools
 
 RUN wget "http://downloads.xiph.org/releases/icecast/icecast-2.3.3.tar.gz" -O- | tar zxvf - && \
