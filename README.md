@@ -2,11 +2,21 @@
 
 AudioEngine is a set of utilities for really easily creating an online streaming architecture, using Docker.
 
+Audio egress currently includes:
+- Icecast
+
+Features include
+- Single configuration file deployment
+
+## To-Do
+
 Audio egress will include:
 
 - Icecast
 - Variable DASH
 - HLS
+
+There will be support for multiple ingest points, to prevent single point of failure. 
 
 # Building
 
