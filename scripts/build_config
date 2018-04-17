@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+require 'yaml'
+require 'erb'
+require 'socket'
+require 'digest/md5'
+
+$CONFIG = YAML::load(File.read('./config.yml'))
+
+$CONFIG['stations'].map do | station |
+	station['mounts'].map do | s |
+		s['egress'] = 'e_' + [station['name'], s['codec'], s['bitrate'], s['processed'] ? 'p' : 'n'].join('_')
+		s
+	end
+	station
+end
+
+p $CONFIG
+
+b = binding
+b.local_variable_set :config, $CONFIG
+b.local_variable_set :hostname, Socket.gethostname
+b.local_variable_set :icecast, {
+	'source_password' => Digest::MD5.hexdigest($CONFIG['secret_key'] + '_s_pw'),
+	'relay_password' => Digest::MD5.hexdigest($CONFIG['secret_key'] + '_r_pw'),
+	'admin_password' => Digest::MD5.hexdigest($CONFIG['secret_key'] + '_a_pw')
+}
+
+files = ['./docker-compose.yml', './docker/icecast/etc/icecast.xml']
+
+files.each do | f |
+
+	renderer = ERB.new(File.read(f + '.erb'))
+	File.write(f, renderer.result(b))
+
+end
