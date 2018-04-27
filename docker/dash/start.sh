@@ -26,7 +26,7 @@ fi
 
 while [ true ]; do
 
-	/usr/bin/DashCast -a "http://stream.cor.insanityradio.com/insanity320.mp3" -live -conf /dashcast.conf -out /srv/dash -seg-dur 1000 -frag-dur 1000 -mpd ${INGEST_NAME}.mpd
+	/usr/bin/DashCast -a "http://stream.cor.insanityradio.com/insanity320.mp3" -live -conf /dashcast.conf -out /srv/dash -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
 
 	sleep 0.1
 done
