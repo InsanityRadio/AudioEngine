@@ -19,9 +19,9 @@ done
 cat /dashcast.conf
 
 if [ "$INGEST_PROCESSED" == "1" ]; then
-	URI="http://icecast:8000/internal/master/${INGEST_NAME}_processed.flac"
+	URI="rtmp://rtmp:1935/internal/${INGEST_NAME}_processed"
 else
-	URI="http://icecast:8000/internal/master/${INGEST_NAME}.flac"
+	URI="rtmp://rtmp:1935/internal/${INGEST_NAME}"
 fi
 
 while [ true ]; do
