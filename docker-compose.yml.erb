@@ -86,6 +86,15 @@ services:
     volumes:
       - wwwroot:/usr/share/icecast/web/dash
 
+  rtmp:
+    build:
+      context: docker/rtmp
+      args: 
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+
   nginx:
     ports:
       - "<%= config['http_port'] %>:80"
