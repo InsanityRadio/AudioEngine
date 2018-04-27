@@ -76,8 +76,6 @@ services:
 
   icecast:
     #restart: always
-    ports:
-      - "8000:8000"
     build:
       context: docker/icecast
       args:
@@ -87,6 +85,19 @@ services:
         - HTTPS_PROXY
     volumes:
       - wwwroot:/usr/share/icecast/web/dash
+
+  nginx:
+    ports:
+      - "<%= config['http_port'] %>:80"
+    build:
+      context: docker/nginx
+      args: 
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    volumes:
+      - wwwroot:/srv/www
 
 volumes:
   wwwroot: 
