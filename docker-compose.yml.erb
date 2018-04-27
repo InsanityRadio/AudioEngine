@@ -55,7 +55,25 @@ services:
       - INGEST_NAME=<%= station['name'] %>
       - AUTH=<%= icecast['source_password'] %>
 <% end %>
+
+  dash_<%= station['name'] %>:
+    build:
+      context: docker/dash
+      args:
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    environment:
+      - DASH_BITRATE=<%= station['dash']['bitrates'].join(',') %>
+      - DASH_SEGLENGTH=<%= station['dash']['seg_length'] || 15000 %>
+      - INGEST_NAME=<%= station['name'] %>
+      - INGEST_PROCESSED=<%= station['dash']['processed'] ? 1 : 0 %>
+    volumes:
+      - wwwroot:/srv/dash
+   
 <% end %>
+
   icecast:
     #restart: always
     ports:
@@ -67,3 +85,8 @@ services:
         - https_proxy
         - HTTP_PROXY
         - HTTPS_PROXY
+    volumes:
+      - wwwroot:/usr/share/icecast/web/dash
+
+volumes:
+  wwwroot: 

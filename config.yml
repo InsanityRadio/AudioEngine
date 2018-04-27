@@ -24,6 +24,14 @@ stations:
         name: insanity320.mp3
         processed: true
         bitrate: 320
+    
+    dash:
+      processed: true
+      bitrates:
+        - 256
+        - 128
+        - 96
+        - 64
 
 
 # This key is used to derive (Icecast source) passwords. Eventually, it won't be necessary.
@@ -32,13 +40,3 @@ secret_key: U7i1k1yYKSztBVP7kXyHcJ5zuYFYx2hv2326dWIGKQJByNd1ahpHtc0rk3ONNyg
 
 #icecast:
 
-dash:
-  stations:
-    - name: insanity
-      source: insanity
-      processed: true
-      bitrates:
-        - 256
-        - 128
-        - 96
-        - 64
