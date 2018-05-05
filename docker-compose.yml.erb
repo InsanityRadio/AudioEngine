@@ -16,6 +16,11 @@ services:
       - /dev/snd:/dev/snd
 <% end %>
     environment:
+      - http_proxy
+      - https_proxy
+      - HTTP_PROXY
+      - HTTPS_PROXY
+      - NO_PROXY=icecast
       - INGEST_NAME=<%= station['name'] %>
       - INGEST_TYPE=<%= station['ingest']['type'] %>
       - INGEST_URI=<%= station['ingest']['uri'] %>

@@ -6,12 +6,20 @@
 #     - INGEST_BITRATE=<%= mount['bitrate'] %>
 
 if [ "$INGEST_PROCESSED" == "1" ]; then
-	URI="rtmp://rtmp:1935/internal/${INGEST_NAME}_processed"
+	URI="http://icecast:8000/internal/master/${INGEST_NAME}_processed.flac"
 else
-	URI="rtmp://rtmp:1935/internal/${INGEST_NAME}"
+	URI="http://icecast:8000/internal/master/${INGEST_NAME}.flac"
+fi
+
+if [ "$INGEST_CT" == "" ]; then
+	INGEST_CT="audio/${INGEST_CODEC}"
+fi
+
+if [ "$INGEST_CODEC_CONTAINER" == "" ]; then
+	INGEST_CODEC_CONTAINER="${INGEST_CODEC}"
 fi
 
 while [ true ]; do
-	ffmpeg -re $TYPE -i "$URI" -c:a "${INGEST_CODEC}" -b:a "${INGEST_BITRATE}" -f "${INGEST_CODEC}" -legacy_icecast 1 "icecast://source:${AUTH}@icecast:8000/internal/master/${EGRESS_NAME}"
+	ffmpeg -re -i "$URI" -c:a "${INGEST_CODEC}" -b:a "${INGEST_BITRATE}" -f "${INGEST_CODEC_CONTAINER}" -legacy_icecast 1 -content_type "${INGEST_CT}" "icecast://source:${AUTH}@icecast:8000/internal/master/${EGRESS_NAME}"
 	sleep 0.1
 done

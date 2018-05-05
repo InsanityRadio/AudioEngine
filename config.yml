@@ -6,8 +6,8 @@ stations:
       #type: card
       type: network
       #uri: plug:dsnoop:1
-      #uri: http://10.32.0.126/insanity_unprocessed.flac
-      uri: http://stream.cor.insanityradio.com:8000/insanity_unprocessed.flac
+      uri: http://10.32.0.126:8000/insanity_unprocessed.flac
+      #uri: http://stream.cor.insanityradio.com:8000/insanity_unprocessed.flac
 
     # If set to true, StereoTool will apply DSP to our ingested signal. 
     # ST Configuration file is a to-do, m'afraid

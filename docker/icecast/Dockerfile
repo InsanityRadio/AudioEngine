@@ -12,12 +12,12 @@ RUN apt-get -qq -y update && \
 		libogg-dev libvorbis-dev libtheora-dev libflac-dev \
 		libspeex-dev python-setuptools
 
-RUN wget "http://downloads.xiph.org/releases/icecast/icecast-2.3.3.tar.gz" -O- | tar zxvf - && \
-	cd "icecast-2.3.3" && \
+RUN wget "http://downloads.xiph.org/releases/icecast/icecast-2.4.3.tar.gz" -O- | tar zxvf - && \
+	cd "icecast-2.4.3" && \
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var && \
 	make && make install && useradd icecast && \
 	chown -R icecast /etc/icecast.xml && \
-	sed -i "s/<sources>[^<]*<\/sources>/<sources>42<\/sources>/g" /etc/icecast.xml
+	sed -i "s/<sources>[^<]*<\/sources>/<sources>999<\/sources>/g" /etc/icecast.xml
 
 RUN easy_install supervisor && \
     easy_install supervisor-stdout
