@@ -27,7 +27,7 @@ fi
 while [ true ]; do 
 
 	# ffmpeg seems to be able to understand big-endian encoded audio easiest within DashCast
-	ffmpeg -i "${URI}" -c:a s302m -f mpegts tcp://127.0.0.1:9999
+	ffmpeg -i "${URI}" -c:a s302m -strict -2 -f mpegts tcp://127.0.0.1:9999
 
 done &
 
