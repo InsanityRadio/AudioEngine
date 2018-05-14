@@ -24,9 +24,20 @@ else
 	URI="http://icecast:8000/internal/master/${INGEST_NAME}.flac"
 fi
 
+while [ true ]; do 
+
+	# ffmpeg seems to be able to understand big-endian encoded audio easiest within DashCast
+	ffmpeg -i "${URI}" -c:a pcm_s16be -f rtp rtp://127.0.0.1:9999
+
+done &
+
+echo "Waiting for ffmpeg"
+sleep 5
+echo "Starting DashCast"
+
 while [ true ]; do
 
-	/usr/bin/DashCast -a "${URI}" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
+	/usr/bin/DashCast -a "rtp://127.0.0.1:9999" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
 
 	sleep 0.1
 done
