@@ -27,7 +27,7 @@ fi
 while [ true ]; do 
 
 	# ffmpeg seems to be able to understand big-endian encoded audio easiest within DashCast
-	ffmpeg -i "${URI}" -c:a s302m -strict -2 -f mpegts tcp://127.0.0.1:9999
+	ffmpeg -i "${URI}" -c:a pcm_s16be -f rtp rtp://127.0.0.1:9999 -sdp_file /test.sdp
 
 done &
 
@@ -37,7 +37,7 @@ echo "Starting DashCast"
 
 while [ true ]; do
 
-	/usr/bin/DashCast -a "tcp://127.0.0.1:9999?listen" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
+	/usr/bin/DashCast -a "/test.sdp" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
 
 	sleep 0.1
 done

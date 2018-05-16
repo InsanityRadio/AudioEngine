@@ -4,16 +4,16 @@ FROM ubuntu:trusty
 MAINTAINER Jamie Woods <jamie.woods@insanityradio.com>
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV IC_VERSION "2.4.0-kh6"
+ENV IC_VERSION "2.4.0-kh9"
 
 RUN apt-get -qq -y update && \
 	apt-get -qq -y install build-essential \
 		wget curl libxml2-dev libxslt1-dev \
 		libogg-dev libvorbis-dev libtheora-dev libflac-dev \
-		libspeex-dev python-setuptools
+		libspeex-dev python-setuptools libcurl4-openssl-dev
 
-RUN wget "http://downloads.xiph.org/releases/icecast/icecast-2.4.3.tar.gz" -O- | tar zxvf - && \
-	cd "icecast-2.4.3" && \
+RUN wget "https://github.com/karlheyes/icecast-kh/archive/icecast-$IC_VERSION.tar.gz" -O- | tar zxvf - && \
+	cd "icecast-kh-icecast-$IC_VERSION" && \
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var && \
 	make && make install && useradd icecast && \
 	chown -R icecast /etc/icecast.xml && \
