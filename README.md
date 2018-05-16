@@ -17,6 +17,8 @@ Audio egress will include:
 
 There will be support for multiple ingest points, to prevent single point of failure from bad hardware. 
 
+There will also be inbuilt telemetry support, uniform across all egress points. 
+
 # Building
 
 Season config.yml to taste. Then run `ruby scripts/build_config` to build `docker-compose.yml`, and fill config files.
