@@ -38,6 +38,9 @@
     <mount>
         <mount-name>/<%= mount['name'] %></mount-name>
         <fallback-mount>/internal/master/<%= mount['egress'] %></fallback-mount>
+        <authentication type="url">
+          <option name="listener_remove" value="http://nginx/internal/listener_remove" />
+        </authentication>
     </mount>
 <% end %>
 <% end %>

@@ -27,7 +27,13 @@ fi
 
 while [ true ]; do
 
-	/usr/bin/DashCast -a "$URI" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd
+	( /usr/bin/DashCast -a "$URI" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd & echo $! > /dash.pid ) | 
+	while IFS= read -r line; do
+		if grep -q "Cannot read audio frame" <<<"$IFS"; then
+			# If we exit here, we can 
+			kill -9 `cat /dash.pid`
+		fi
+	done
 
 	sleep 0.1
 done
