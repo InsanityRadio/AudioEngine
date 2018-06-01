@@ -28,11 +28,9 @@ stations:
     dash:
       processed: true
       bitrates:
-        - 256
-        - 128
-        - 96
-        - 64
-
+        - 128:aac_he
+        - 96:aac_he
+        - 64:aac_he_v2
 
 # This key is used to derive (Icecast source) passwords. Eventually, it won't be necessary.
 # Eventually, a dashboard will be replaced that will automatically authenticate against Icecast
