@@ -6,8 +6,8 @@ stations:
       #type: card
       type: network
       #uri: plug:dsnoop:1
-      #uri: http://10.32.0.126/insanity_unprocessed.flac
-      uri: http://stream.cor.insanityradio.com:8000/insanity_unprocessed.flac
+      uri: http://10.32.0.126:8000/insanity_unprocessed.flac
+      #uri: http://stream.cor.insanityradio.com:8000/insanity_unprocessed.flac
 
     # If set to true, StereoTool will apply DSP to our ingested signal. 
     # ST Configuration file is a to-do, m'afraid
@@ -24,21 +24,19 @@ stations:
         name: insanity320.mp3
         processed: true
         bitrate: 320
-
+    
+    dash:
+      processed: true
+      bitrates:
+        - 128:aac_he
+        - 96:aac_he
+        - 64:aac_he_v2
 
 # This key is used to derive (Icecast source) passwords. Eventually, it won't be necessary.
 # Eventually, a dashboard will be replaced that will automatically authenticate against Icecast
 secret_key: U7i1k1yYKSztBVP7kXyHcJ5zuYFYx2hv2326dWIGKQJByNd1ahpHtc0rk3ONNyg
 
+http_port: 8000
+
 #icecast:
 
-dash:
-  stations:
-    - name: insanity
-      source: insanity
-      processed: true
-      bitrates:
-        - 256
-        - 128
-        - 96
-        - 64

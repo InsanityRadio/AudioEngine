@@ -28,8 +28,6 @@
     </mount>
     <mount>
         <mount-name>/internal/master/<%= station['name'] %>_processed.flac</mount-name>
-        <fallback-mount>/internal/master/<%= station['name'] %>.flac</fallback-mount>
-        <!-- <fallback-override>1</fallback-override> -->
     </mount>
 <% station['mounts'].each do | mount | %>
     <mount>
@@ -38,6 +36,9 @@
     <mount>
         <mount-name>/<%= mount['name'] %></mount-name>
         <fallback-mount>/internal/master/<%= mount['egress'] %></fallback-mount>
+        <authentication type="url">
+          <option name="listener_remove" value="http://nginx/internal/listener_remove" />
+        </authentication>
     </mount>
 <% end %>
 <% end %>
@@ -61,7 +62,7 @@
     <logging>
         <accesslog>access.log</accesslog>
         <errorlog>error.log</errorlog>
-      	<loglevel>3</loglevel> <!-- 4 Debug, 3 Info, 2 Warn, 1 Error -->
+      	<loglevel>2</loglevel> <!-- 4 Debug, 3 Info, 2 Warn, 1 Error -->
       	<logsize>10000</logsize> <!-- Max size of a logfile -->
     </logging>
 
@@ -76,6 +77,7 @@
     <http-headers>
         <header name="Cache-Control" value="no-cache" />
         <header name="Expires" value="0" />
+        <header name="Access-Control-Allow-Origin" value="*" />
     </http-headers>
  
 </icecast>

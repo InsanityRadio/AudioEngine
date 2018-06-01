@@ -16,6 +16,7 @@ services:
       - /dev/snd:/dev/snd
 <% end %>
     environment:
+      - NO_PROXY=icecast
       - INGEST_NAME=<%= station['name'] %>
       - INGEST_TYPE=<%= station['ingest']['type'] %>
       - INGEST_URI=<%= station['ingest']['uri'] %>
@@ -55,11 +56,27 @@ services:
       - INGEST_NAME=<%= station['name'] %>
       - AUTH=<%= icecast['source_password'] %>
 <% end %>
+
+  dash_<%= station['name'] %>:
+    build:
+      context: docker/dash
+      args:
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    environment:
+      - DASH_BITRATE=<%= station['dash']['bitrates'].join(',') %>
+      - DASH_SEGLENGTH=<%= station['dash']['seg_length'] || 15000 %>
+      - INGEST_NAME=<%= station['name'] %>
+      - INGEST_PROCESSED=<%= station['dash']['processed'] ? 1 : 0 %>
+    volumes:
+      - wwwroot:/srv/dash
+   
 <% end %>
+
   icecast:
     #restart: always
-    ports:
-      - "8000:8000"
     build:
       context: docker/icecast
       args:
@@ -67,3 +84,33 @@ services:
         - https_proxy
         - HTTP_PROXY
         - HTTPS_PROXY
+    volumes:
+      - wwwroot:/usr/share/icecast/web/dash
+
+  rtmp:
+    build:
+      context: docker/rtmp
+      args: 
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    volumes:
+      - wwwroot:/srv/www
+
+
+  nginx:
+    ports:
+      - "<%= config['http_port'] %>:80"
+    build:
+      context: docker/nginx
+      args: 
+        - http_proxy
+        - https_proxy
+        - HTTP_PROXY
+        - HTTPS_PROXY
+    volumes:
+      - wwwroot:/srv/www
+
+volumes:
+  wwwroot: 
