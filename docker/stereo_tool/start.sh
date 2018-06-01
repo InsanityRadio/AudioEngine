@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 0.5
 
 while [ true ]; do
 	ffmpeg -i http://icecast:8000/internal/master/${INGEST_NAME}.flac -f wav -acodec pcm_s16le -ac 2 - | /usr/bin/stereo_tool_cmd - - -s /config.sts | ffmpeg -i - \
