@@ -28,8 +28,6 @@
     </mount>
     <mount>
         <mount-name>/internal/master/<%= station['name'] %>_processed.flac</mount-name>
-        <fallback-mount>/internal/master/<%= station['name'] %>.flac</fallback-mount>
-        <!-- <fallback-override>1</fallback-override> -->
     </mount>
 <% station['mounts'].each do | mount | %>
     <mount>
