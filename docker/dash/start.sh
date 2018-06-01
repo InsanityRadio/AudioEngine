@@ -18,7 +18,7 @@ for i in $(echo $DASH_BITRATE | sed "s/,/ /g"); do
 	profile="aac_lc"
 
 	if echo $DASH_BITRATE | grep ':'; then
-		profile=`echo $DASH_BITRATE | cut -f'_' -f2`
+		profile=`echo $DASH_BITRATE | cut -f':' -f2`
 	fi
 
 	MAPS="${MAPS} -map 0:0"
