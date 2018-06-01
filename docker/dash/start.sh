@@ -8,11 +8,24 @@
 
 echo "" > /dashcast.conf
 
+MAPS=""
 ARGS=""
+PROG=""
 
+ITER=0
 for i in $(echo $DASH_BITRATE | sed "s/,/ /g"); do
 
-	ARGS="${ARGS} -f flv -c:a libfdk_aac -profile:a aac_he_v2 -b:a ${i}k -bufsize ${i}k rtmp://rtmp:1935/publish/${INGEST_NAME}_${i}"
+	profile="aac_lc"
+
+	if echo $DASH_BITRATE | grep ':'; then
+		profile=`echo $DASH_BITRATE | cut -f'_' -f2`
+	fi
+
+	MAPS="${MAPS} -map 0:0"
+	ARGS="${ARGS} -c:a:$ITER libfdk_aac -profile:a:$ITER $profile -b:a:$ITER ${i}k"
+	PROG="${PROG} -program st=$ITER:title=${i}"
+
+	ITER=$(expr $ITER + 1)
 
 done
 
@@ -27,7 +40,7 @@ fi
 
 while [ true ]; do
 
-	/opt/ffmpeg/bin/ffmpeg -i "${URI}" $ARGS
+	/opt/ffmpeg/bin/ffmpeg -i "${URI}" $MAPS $ARGS $PROG -f mpegts http://rtmp:80/publish/${INGEST_NAME}
 
 	sleep 0.1
 done

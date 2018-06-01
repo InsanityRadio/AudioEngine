@@ -19,8 +19,15 @@ RUN mkdir -p /tmp/build/nginx && \
 RUN mkdir -p /tmp/build/nginx-rtmp-module && \
     cd /tmp/build/nginx-rtmp-module && \
     wget -O nginx-rtmp-module-dev.tar.gz https://github.com/ut0mt8/nginx-rtmp-module/archive/dev.tar.gz && \
-    tar -xf nginx-rtmp-module-dev.tar.gz && \
-    cd nginx-rtmp-module-dev
+    tar -xf nginx-rtmp-module-dev.tar.gz
+
+RUN mkdir -p /tmp/build/nginx-ts-module && \
+    cd /tmp/build/nginx-ts-module && \
+    wget -O nginx-ts-module-0.1.1.tar.gz https://github.com/arut/nginx-ts-module/archive/v0.1.1.tar.gz && \
+    tar -xf nginx-ts-module-0.1.1.tar.gz && \
+    pwd && ls 
+    #cd nginx-ts-module-0.1.1 && \
+    
 
 # Build and install Nginx
 # The default puts everything under /usr/local/nginx, so it's needed to change
@@ -37,7 +44,9 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
         --with-http_ssl_module \
         --with-threads \
         --with-ipv6 \
-        --add-module=/tmp/build/nginx-rtmp-module/nginx-rtmp-module-dev && \
+        --with-debug \
+        --add-module=/tmp/build/nginx-rtmp-module/nginx-rtmp-module-dev \
+        --add-module=/tmp/build/nginx-ts-module/nginx-ts-module-0.1.1 && \
     make -j $(getconf _NPROCESSORS_ONLN) && \
     make install && \
     mkdir /var/lock/nginx && \
@@ -47,15 +56,6 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
-
-RUN sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
-RUN echo "deb http://http.debian.net/debian jessie-backports main contrib non-free" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y \
-    ffmpeg
-RUN apt-get install -y locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8
-ENV LC_ALL C.UTF-8 
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
