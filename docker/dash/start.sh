@@ -8,11 +8,11 @@
 
 echo "" > /dashcast.conf
 
+ARGS=""
+
 for i in $(echo $DASH_BITRATE | sed "s/,/ /g"); do
 
-	echo "[a${i}]" >> /dashcast.conf
-	echo "type=audio" >> /dashcast.conf
-	echo "bitrate=${i}000" >> /dashcast.conf
+	ARGS="${ARGS} -f flv -c:a libfdk_aac -profile:a aac_he_v2 -b:a ${i}k -bufsize ${i}k rtmp://rtmp:1935/publish/${INGEST_NAME}_${i}"
 
 done
 
@@ -27,13 +27,7 @@ fi
 
 while [ true ]; do
 
-	( /usr/bin/DashCast -a "$URI" -live -conf /dashcast.conf -out /srv/dash -time-shift 300 -seg-dur ${DASH_SEGLENGTH} -frag-dur ${DASH_SEGLENGTH} -mpd ${INGEST_NAME}.mpd & echo $! > /dash.pid ) | 
-	while IFS= read -r line; do
-		if grep -q "Cannot read audio frame" <<<"$IFS"; then
-			# If we exit here, we can 
-			kill -9 `cat /dash.pid`
-		fi
-	done
+	/opt/ffmpeg/bin/ffmpeg -i "${URI}" $ARGS
 
 	sleep 0.1
 done

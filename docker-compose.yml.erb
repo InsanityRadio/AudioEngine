@@ -95,6 +95,9 @@ services:
         - https_proxy
         - HTTP_PROXY
         - HTTPS_PROXY
+    volumes:
+      - wwwroot:/srv/www
+
 
   nginx:
     ports:

@@ -373,12 +373,6 @@ RUN apt-get update
 RUN apt-get install -y git build-essential make pkg-config g++ zlib1g-dev wget curl libssl-dev libjack-dev libasound2-dev libpulse-dev libsdl1.2-dev
 
 WORKDIR /tmp
-RUN git clone https://github.com/gpac/gpac.git /tmp/gpac
-WORKDIR /tmp/gpac
-
-RUN ./configure -disable-all --enable-import --enable-export --enable-parsers && make && make install && make install-lib
-
-RUN cp bin/gcc/DashCast /usr/bin/DashCast
 
 COPY start.sh /
 RUN chmod +x /start.sh
