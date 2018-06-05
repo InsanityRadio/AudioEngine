@@ -22,7 +22,7 @@ ARG        PREFIX=/opt/ffmpeg
 ARG        MAKEFLAGS="-j2"
 
 ENV         FFMPEG_VERSION=3.3.7     \
-            FDKAAC_VERSION=0.1.5      \
+            FDKAAC_VERSION=a50eecf65b5ce5d4f03768c5c2cb4b492d2badad      \
             LAME_VERSION=3.99.5       \
             LIBASS_VERSION=0.13.7     \
             OGG_VERSION=1.3.2         \
@@ -200,7 +200,7 @@ RUN \
         DIR=/tmp/fdk-aac && \
         mkdir -p ${DIR} && \
         cd ${DIR} && \
-        curl -sL https://github.com/mstorsjo/fdk-aac/archive/v${FDKAAC_VERSION}.tar.gz | \
+        curl -sL https://github.com/mstorsjo/fdk-aac/archive/${FDKAAC_VERSION}.tar.gz | \
         tar -zx --strip-components=1 && \
         autoreconf -fiv && \
         ./configure --prefix="${PREFIX}" --enable-shared --datadir="${DIR}" && \
