@@ -7,6 +7,6 @@ else
 fi
 
 while [ true ]; do
-	ffmpeg -re $TYPE -i "$INGEST_URI" -c:a flac -f ogg -legacy_icecast 1 -content_type audio/ogg "icecast://source:${AUTH}@icecast:8000/internal/master/${INGEST_NAME}.flac"
+	/opt/ffmpeg/bin/ffmpeg  -re $TYPE -i "$INGEST_URI" -c:a flac -f ogg -legacy_icecast 1 -content_type audio/ogg "icecast://source:${AUTH}@icecast:8000/internal/master/${INGEST_NAME}.flac"
 	sleep 0.1
 done
