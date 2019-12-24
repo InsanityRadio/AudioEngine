@@ -25,11 +25,16 @@ b.local_variable_set :icecast, {
 	'admin_password' => Digest::MD5.hexdigest($CONFIG['secret_key'] + '_a_pw')
 }
 
-files = ['./docker-compose.yml', './docker/icecast/etc/icecast.xml']
+files = {
+	'compose' => './docker-compose.yml',
+	'icecast' => './docker/icecast/etc/icecast.xml'
+}
 
-files.each do | f |
+files.each do | name, out_file |
 
-	renderer = ERB.new(File.read(f + '.erb'))
-	File.write(f, renderer.result(b))
+	in_file = $CONFIG['custom'].include?(name) ? $CONFIG['custom'][name] : out_file + '.erb'
+
+	renderer = ERB.new(File.read(in_file))
+	File.write(out_file, renderer.result(b))
 
 end

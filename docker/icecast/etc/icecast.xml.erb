@@ -41,6 +41,12 @@
         </authentication>
     </mount>
 <% end %>
+<% station['aliases'].each do | mount | %>
+    <mount>
+        <mount-name>/<%= mount['destination'] %></mount-name>
+        <fallback-mount><%= mount['source'] %></fallback-mount>
+    </mount>
+<% end %>
 <% end %>
 
     <hostname><%= hostname %></hostname>

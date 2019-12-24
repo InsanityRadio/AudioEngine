@@ -12,9 +12,10 @@ services:
         - HTTPS_PROXY
 <% if station['ingest']['type'] == 'card' %>
     privileged: true
-    volumes:
-      - /dev/snd:/dev/snd
+    devices:
+      - "/dev/snd"
 <% end %>
+    restart: always
     environment:
       - NO_PROXY=icecast
       - INGEST_NAME=<%= station['name'] %>
@@ -25,6 +26,7 @@ services:
 <% station['mounts'].each do | mount | %>
 
   tc_<%= station['name']%>_<%= mount['id'] %>:
+    restart: always
     build:
       context: docker/transcode
       args:
@@ -45,6 +47,7 @@ services:
 <% if station['processed'] %>
 
   dsp_<%= station['name'] %>:
+    restart: always
     build:
       context: docker/stereo_tool
       args:
@@ -58,6 +61,7 @@ services:
 <% end %>
 
   dash_<%= station['name'] %>:
+    restart: always
     build:
       context: docker/dash
       args:
@@ -77,6 +81,7 @@ services:
 
   icecast:
     #restart: always
+    restart: always
     build:
       context: docker/icecast
       args:
@@ -88,6 +93,7 @@ services:
       - wwwroot:/usr/share/icecast/web/dash
 
   rtmp:
+    restart: always
     build:
       context: docker/rtmp
       args: 
@@ -100,8 +106,9 @@ services:
 
 
   nginx:
+    restart: always
     ports:
-      - "<%= config['http_port'] %>:80"
+        - "<%= config['http_port'] %>:80"
     build:
       context: docker/nginx
       args: 
@@ -114,3 +121,4 @@ services:
 
 volumes:
   wwwroot: 
+
